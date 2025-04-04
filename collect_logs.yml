@@ -1,0 +1,17 @@
+---
+- name: Collect Logs
+  hosts: all
+  become: true
+  tasks:
+    - name: Collect Logs from Control Node
+      local_action:
+        module: fetch
+        src: /var/log/syslog
+        dest: /tmp/control_node_logs
+        flat: yes
+      delegate_to: localhost
+
+    - name: Transfer Logs to Managed Node
+      copy:
+        src: /tmp/control_node_logs
+        dest: /home/velasco1/manage_node_logs
